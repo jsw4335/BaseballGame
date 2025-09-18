@@ -6,9 +6,17 @@ const rl = readline.createInterface({
 })
 
 function randomNumbers() {
-  const randNum = Math.round(Math.random() * 1000)
-  console.log()
-  console.log('컴퓨터가 숫자를 뽑았습니다.')
+  let randNum = []
+  console.log('난수 생성')
+
+  while (randNum.length !== 3) {
+    const r = Math.floor(Math.random() * 10)
+    // 1부터 9까지 서로 다른 숫자로 이루어진 3자리의 숫자를 맞추는 게임
+    if (r !== 0 && !randNum.includes(r)) {
+      randNum.push(r)
+    }
+  }
+  console.log('난수 생성 완료')
   return randNum
 }
 
@@ -26,7 +34,6 @@ function compare(answer, yourAnswer) {
 
 function start() {
   // rl.question('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
-  console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
 
   rl.on('line', (line) => {
     if (line === '1') {
@@ -44,4 +51,13 @@ function start() {
   })
 }
 
-start()
+let flag = false
+function main() {
+  console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
+  rl.on('line', (line) => {
+    if (line === '1') {
+    }
+  })
+}
+
+main()
