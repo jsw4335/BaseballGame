@@ -5,6 +5,8 @@ const rl = readline.createInterface({
   output: process.stdout,
 })
 
+let flag = true
+
 function randomNumbers() {
   let randNum = []
   console.log('난수 생성')
@@ -16,7 +18,7 @@ function randomNumbers() {
       randNum.push(r)
     }
   }
-  console.log('난수 생성 완료')
+  console.log(randNum)
   return randNum
 }
 
@@ -41,28 +43,48 @@ function inputNumber(query) {
   })
 }
 
-async function yourNumber() {
+function printResult(strike,ball){
+  if (ball>0 && strike===0){
+    console.log(`${ball}볼\n`)
+  }else if(ball===0 && strike>0){
+    console.log(`${strike}스트라이크\n`)
+  }else if (ball>0 && strike>0){
+    console.log(`${ball}볼 ${strike}스트라이크\n`)
+  }else{
+    console.log('낫싱\n')
+  }
+}
+
+async function yourNumber(value) {
+  let playing=false
   try {
-    const numbers = await inputNumber('숫자를 입력해주세요 : ')
-    console.log(typeof numbers)
-    return numbers
+    playing=true
+    while(playing){
+    
+      const numbers = await inputNumber('숫자를 입력해주세요 : ')
+      const [strike,ball]=compare(value,numbers)
+      printResult(strike,ball)
+      if (strike ===3){
+
+        console.log('3개의 숫자를 모두 맞히셨습니다.\n')
+        console.log('-------게임 종료-------\n')
+        playing=false
+        // console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
+      }
+    }
+  //  return numbers 
   } catch (error) {
     console.error(error)
-  } finally {
-    rl.close()
   }
 }
 
 async function start() {
   const answer = randomNumbers()
-  const yourAnswer = await yourNumber()
-  const [strike, ball] = compare(answer, yourAnswer)
+  await yourNumber(answer)
 }
 
-let flag = false
 function main() {
   console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
-
   rl.on('line', (line) => {
     switch (line) {
       case '1':
@@ -70,6 +92,7 @@ function main() {
         break
       case '9':
         console.log('애플리케이션이 종료되었습니다.')
+        flag=false
         rl.close()
         break
       default:
@@ -79,4 +102,6 @@ function main() {
   })
 }
 
+
 main()
+
