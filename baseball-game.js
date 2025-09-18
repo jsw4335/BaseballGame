@@ -20,44 +20,43 @@ function randomNumbers() {
   return randNum
 }
 
-function compare(answer, yourAnswer) {
-  console.log(answer, yourAnswer)
-
-  for (let i = 0; i < answer.length; i++) {
-    for (let j = 0; j < yourAnswer.length; j++) {
-      if (answer[i] === yourAnswer[j]) {
-        console.log('비교')
-      }
+function compare(computer, user) {
+  let strike = 0
+  let ball = 0
+  const yourAnswer = user.split('')
+  for (let i = 0; i < computer.length; i++) {
+    let d = parseInt(yourAnswer[i])
+    if (computer[i] === d) {
+      strike++
+    } else if (computer.includes(d)) {
+      ball++
     }
   }
+  return [strike, ball]
 }
 
-function inputNumber(query){
-  return new Promise(resolve =>{
+function inputNumber(query) {
+  return new Promise((resolve) => {
     rl.question(query, resolve)
   })
 }
 
-async function yourNumber(){
-  try{
-    const numbers= await inputNumber('숫자를 입력해주세요 : ')
-    console.log(numbers)
+async function yourNumber() {
+  try {
+    const numbers = await inputNumber('숫자를 입력해주세요 : ')
+    console.log(typeof numbers)
     return numbers
-  }catch(error){
+  } catch (error) {
     console.error(error)
+  } finally {
+    rl.close()
   }
 }
 
-function start() {
+async function start() {
   const answer = randomNumbers()
-  // let strike = 0
-  // let ball = 0
-  // rl.on('line', (input) => {
-  //   // const test1 = parseInt(line)
-  //   compare(answer, input)
-  // })
-  const yourAnswer=yourNumber()
-
+  const yourAnswer = await yourNumber()
+  const [strike, ball] = compare(answer, yourAnswer)
 }
 
 let flag = false
@@ -65,7 +64,7 @@ function main() {
   console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
 
   rl.on('line', (line) => {
-    switch(line){
+    switch (line) {
       case '1':
         start()
         break
@@ -73,12 +72,10 @@ function main() {
         console.log('애플리케이션이 종료되었습니다.')
         rl.close()
         break
-      default :
+      default:
         console.log(`${line}\n`)
         break
     }
-    
-
   })
 }
 
