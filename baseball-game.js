@@ -32,31 +32,53 @@ function compare(answer, yourAnswer) {
   }
 }
 
-function start() {
-  // rl.question('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
-
-  rl.on('line', (line) => {
-    if (line === '1') {
-      const answer = randomNumbers()
-      let strike = 0
-      let ball = 0
-      rl.on('line', (input) => {
-        // const test1 = parseInt(line)
-        compare(answer, input)
-      })
-    } else if (line === '9') {
-      console.log('애플리케이션이 종료되었습니다.')
-      process.exit()
-    }
+function inputNumber(query){
+  return new Promise(resolve =>{
+    rl.question(query, resolve)
   })
+}
+
+async function yourNumber(){
+  try{
+    const numbers= await inputNumber('숫자를 입력해주세요 : ')
+    console.log(numbers)
+    return numbers
+  }catch(error){
+    console.error(error)
+  }
+}
+
+function start() {
+  const answer = randomNumbers()
+  // let strike = 0
+  // let ball = 0
+  // rl.on('line', (input) => {
+  //   // const test1 = parseInt(line)
+  //   compare(answer, input)
+  // })
+  const yourAnswer=yourNumber()
+
 }
 
 let flag = false
 function main() {
   console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
+
   rl.on('line', (line) => {
-    if (line === '1') {
+    switch(line){
+      case '1':
+        start()
+        break
+      case '9':
+        console.log('애플리케이션이 종료되었습니다.')
+        rl.close()
+        break
+      default :
+        console.log(`${line}\n`)
+        break
     }
+    
+
   })
 }
 
