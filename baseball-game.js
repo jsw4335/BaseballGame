@@ -5,7 +5,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 })
 
-let flag = true
+let records=[]
 
 function randomNumbers() {
   let randNum = []
@@ -60,8 +60,11 @@ async function yourNumber(value) {
   try {
     playing=true
     while(playing){
-    
       const numbers = await inputNumber('숫자를 입력해주세요 : ')
+      if (numbers.length!==3){
+        console.log('잘못된 입력입니다.')
+        continue
+      }
       const [strike,ball]=compare(value,numbers)
       printResult(strike,ball)
       if (strike ===3){
@@ -69,7 +72,7 @@ async function yourNumber(value) {
         console.log('3개의 숫자를 모두 맞히셨습니다.\n')
         console.log('-------게임 종료-------\n')
         playing=false
-        // console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
+        console.log('게임을 새로 시작하려면 1, 기록을 보려면 2, 종료하려면 9을 입력하세요.')
       }
     }
   //  return numbers 
@@ -79,20 +82,34 @@ async function yourNumber(value) {
 }
 
 async function start() {
+
   const answer = randomNumbers()
   await yourNumber(answer)
+
+}
+
+function getCurrentTime(){
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = ('0' + (today.getMonth() + 1)).slice(-2)
+  const day = ('0' + today.getDate()).slice(-2)
+  const hours = ('0' + today.getHours()).slice(-2)
+  const minutes = ('0' + today.getMinutes()).slice(-2)
+  return `${year}.${month}.${day} ${hours}:${minutes}`
 }
 
 function main() {
-  console.log('게임을 새로 시작하려면 1, 종료하려면 9를 입력하세요.')
-  rl.on('line', (line) => {
+  console.log('게임을 새로 시작하려면 1, 기록을 보려면 2, 종료하려면 9을 입력하세요.')
+  rl.on('line', (line) => {  
     switch (line) {
       case '1':
         start()
         break
+      case '2':
+
+
       case '9':
         console.log('애플리케이션이 종료되었습니다.')
-        flag=false
         rl.close()
         break
       default:
