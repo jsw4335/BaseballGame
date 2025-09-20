@@ -7,6 +7,7 @@ const rl = readline.createInterface({
 
 let records = []
 let session = {
+  // 회차별 게임 기록
   start: null,
   end: null,
   total: 0,
@@ -19,6 +20,7 @@ function inputQuery(query) {
   })
 }
 
+/** 난수생성 함수 */
 function randomNumbers() {
   let randNum = []
 
@@ -34,10 +36,11 @@ function randomNumbers() {
   return randNum
 }
 
-function compare(computer, user) {
+/** 컴퓨터와 플레이어의 입력값 비교 함수 */
+function compare(computer, player) {
   let strike = 0
   let ball = 0
-  const yourAnswer = user.split('')
+  const yourAnswer = player.split('')
   for (let i = 0; i < computer.length; i++) {
     let d = parseInt(yourAnswer[i])
     if (computer[i] === d) {
@@ -76,7 +79,8 @@ function getCurrentTime() {
   return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`
 }
 
-async function yourNumber(value) {
+/** 플레이어 입력값 처리 함수 */
+async function playerInputProcess(value) {
   let playing = false
   let count = 0
   try {
@@ -113,6 +117,7 @@ async function yourNumber(value) {
   }
 }
 
+/** 게임 결과 확인 함수 */
 async function checkResult() {
   let checkRecord = true
   try {
@@ -125,13 +130,15 @@ async function checkResult() {
         console.log(
           '게임을 새로 시작하려면 1, 기록을 보려면 2, 종료하려면 9을 입력하세요.'
         )
-      } else if (records.length < gameNumber) {
+      } else if (records.length < +gameNumber) {
         console.log('\n확인할 게임 번호에 해당 기록이 없습니다.\n')
-      } else {
+      } else if (records.length > 0 && records.length >= +gameNumber) {
         console.log(`\n${gameNumber}번 게임결과`)
         console.log(recordMessageList[gameNumber - 1])
         console.log('3개의 숫자를 모두 맞히셨습니다.')
         console.log('-------기록 종료-------\n')
+      } else {
+        console.log('잘못된 입력값입니다.')
       }
     }
   } catch (error) {
@@ -141,10 +148,10 @@ async function checkResult() {
 
 async function start() {
   const answer = randomNumbers()
-  await yourNumber(answer)
+  await playerInputProcess(answer)
 }
 
-function main() {
+function app() {
   console.log(
     '게임을 새로 시작하려면 1, 기록을 보려면 2, 종료하려면 9을 입력하세요.'
   )
@@ -180,4 +187,4 @@ function main() {
   })
 }
 
-main()
+app()
